@@ -45,14 +45,13 @@ const Data = {
     app: null,
     auth: null,
     set mySession(e) {
-        console.log("New session value:", e)
         this._mySession = e;
         if (e) {
             $(elements.createBtn).text("Remove group");
 
             $(elements.mySessionKey).text(e.Key);
             $(elements.mySessionKey).css("display", "flex");
-            
+
             $(elements.connectBtn).css("display", "none");
             $(elements.connectInput).css("display", "none");
 
@@ -96,59 +95,49 @@ const Data = {
             $(elements.createBtn).css("display", "flex");
         }
     },
-    get mySessionUsers(){
+    get mySessionUsers() {
         return this._mySessionUsers;
     },
-    set mySessionUsers(e){
+    set mySessionUsers(e) {
         $(elements.mySessionUsers).text(e);
         this._mySessionUsers = e;
     }
 }
 
-function DataUpdate(){
-    if(Data.connectedSession){
+function DataUpdate() {
+    if (Data.connectedSession) {
         MangaLib.BlockMouse();
-    }else{
+    } else {
         MangaLib.UnlockMouse();
     }
-    console.log(Data.connectedSession)
-    if(Data.mySession){
+    if (Data.mySession) {
         let needUpdate = false;
-        if(Data.mySession.LHref !==location.href){
+        if (Data.mySession.LHref !== location.href) {
             needUpdate = true;
         }
-        if(Data.mySession.LPath !==location.pathname){
+        if (Data.mySession.LPath !== location.pathname) {
             needUpdate = true;
         }
-        if(Data.mySession.Page !==MangaLib.MyPage){
+        if (Data.mySession.Page !== MangaLib.MyPage) {
             needUpdate = true;
-        }        
-        if(needUpdate){
-            console.log("Update")
+        }
+        if (needUpdate) {
             Data.mySession.LHref = location.href;
             Data.mySession.LPath = location.pathname;
             Data.mySession.Page = MangaLib.MyPage;
-            set(ref(getDatabase(), 'Sessions/' + Data.uid), Data.mySession).then(()=>{
-                console.log("updated")
-                setTimeout(DataUpdate,150);
+            set(ref(getDatabase(), 'Sessions/' + Data.uid), Data.mySession).then(() => {
+                setTimeout(DataUpdate, 150);
             });
-        }else{
-            setTimeout(DataUpdate,150);
+        } else {
+            setTimeout(DataUpdate, 150);
         }
-       
-        
-    }else if(Data.connectedSession){
 
-        
-        setTimeout(DataUpdate,150);
-    }    
-    else{
-        setTimeout(DataUpdate,500);
+
+    } else {
+        setTimeout(DataUpdate, 500);
     }
-   
+
 }
-
-
 
 
 export function Load() {
@@ -170,7 +159,7 @@ function onAuth(user) {
             const dt = data.val();
             Data.mySession = data.val();
             let count = 0;
-            if (dt&&dt.Users) {
+            if (dt && dt.Users) {
                 for (const dtKey in dt.Users) {
                     count++;
                 }
@@ -186,6 +175,10 @@ function onAuth(user) {
                     if (val.Users[Data.uid]) {
                         Data.connectedSession = val["Key"];
                         mdf = true;
+                        if (MangaLib.SetPathName(val.LPath, val.LHref)) {
+                            MangaLib.GoToPage(val.Page);
+                        }
+
                     }
                 }
             }
@@ -222,7 +215,6 @@ function disconnect() {
         for (const fdKey in sessions)
             if (sessions[fdKey].Key === Data.connectedSession)
                 sessionKey = fdKey;
-        console.log(sessionKey);
         if (!sessionKey) return;
         const sessionUsersRef = ref(getDatabase(), 'Sessions/' + sessionKey + "/Users/" + Data.uid);
         remove(sessionUsersRef).then();

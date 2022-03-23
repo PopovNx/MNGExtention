@@ -25751,7 +25751,11 @@ var MangaLib = {
   SetPathName: function SetPathName(path, href) {
     if (location.pathname !== path) {
       location.href = href;
+      console.log("Loading New Src");
+      return false;
     }
+
+    return true;
   },
 
   get MyPage() {
@@ -25764,10 +25768,12 @@ var MangaLib = {
 
   GoToPage: function GoToPage(page) {
     while (page > this.MyPage) {
+      console.log("Page Up");
       this.NextPage();
     }
 
     while (page < this.MyPage) {
+      console.log("Page Down");
       this.PrevPage();
     }
   }
@@ -25836,7 +25842,6 @@ var Data = {
   auth: null,
 
   set mySession(e) {
-    console.log("New session value:", e);
     this._mySession = e;
 
     if (e) {
@@ -25906,8 +25911,6 @@ function DataUpdate() {
     _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.UnlockMouse();
   }
 
-  console.log(Data.connectedSession);
-
   if (Data.mySession) {
     var needUpdate = false;
 
@@ -25924,19 +25927,15 @@ function DataUpdate() {
     }
 
     if (needUpdate) {
-      console.log("Update");
       Data.mySession.LHref = location.href;
       Data.mySession.LPath = location.pathname;
       Data.mySession.Page = _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.MyPage;
       (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.set)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions/' + Data.uid), Data.mySession).then(function () {
-        console.log("updated");
         setTimeout(DataUpdate, 150);
       });
     } else {
       setTimeout(DataUpdate, 150);
     }
-  } else if (Data.connectedSession) {
-    setTimeout(DataUpdate, 150);
   } else {
     setTimeout(DataUpdate, 500);
   }
@@ -25981,6 +25980,10 @@ function onAuth(user) {
           if (val.Users[Data.uid]) {
             Data.connectedSession = val["Key"];
             mdf = true;
+
+            if (_Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.SetPathName(val.LPath, val.LHref)) {
+              _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.GoToPage(val.Page);
+            }
           }
         }
       }
@@ -26024,7 +26027,6 @@ function disconnect() {
       if (sessions[fdKey].Key === Data.connectedSession) sessionKey = fdKey;
     }
 
-    console.log(sessionKey);
     if (!sessionKey) return;
     var sessionUsersRef = (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions/' + sessionKey + "/Users/" + Data.uid);
     (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.remove)(sessionUsersRef).then();

@@ -36,7 +36,10 @@
     SetPathName(path,href){
         if(location.pathname!==path){
             location.href = href;
+            console.log("Loading New Src");
+            return false;
         }
+        return true;
     },
     get MyPage(){
         if(location.search.split("=").length!==2){
@@ -45,9 +48,14 @@
         return parseInt(location.search.split("=")[1]);
     },
     GoToPage(page){
-       while (page>this.MyPage)
+       while (page>this.MyPage){
+           console.log("Page Up");
            this.NextPage();
-        while (page<this.MyPage)
+       }          
+        while (page<this.MyPage){
+            console.log("Page Down");
             this.PrevPage();
+        }
+          
     }
 }
