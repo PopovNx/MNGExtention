@@ -1,0 +1,29 @@
+{
+  "name": "MngSyncTest",
+  "description": "Just test",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.firebaseio.com/*",
+    "*://mangalib.me/*"
+  ],
+  "content_security_policy": {
+    "script-src": "'self' 'unsafe-eval' https://cdn.firebase.com https://*.firebaseio.com https://*.firebaseio-demo.com",
+    "object-src": "'self'"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://mangalib.me/*"
+      ],
+      "js": [
+        "main.js"
+      ]
+    }
+  ]
+}
