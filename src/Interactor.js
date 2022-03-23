@@ -48,14 +48,19 @@
         return parseInt(location.search.split("=")[1]);
     },
     GoToPage(page){
-       while (page>this.MyPage){
+        let changed = false;
+       if (page>this.MyPage){
            console.log("Page Up");
            this.NextPage();
+           changed = true;
        }          
-        while (page<this.MyPage){
+        if(page<this.MyPage){
             console.log("Page Down");
             this.PrevPage();
+            changed = true;
         }
-          
+          if(changed){
+              setTimeout(()=>this.GoToPage(page), 10);
+          }
     }
 }

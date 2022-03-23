@@ -25767,14 +25767,26 @@ var MangaLib = {
   },
 
   GoToPage: function GoToPage(page) {
-    while (page > this.MyPage) {
+    var _this = this;
+
+    var changed = false;
+
+    if (page > this.MyPage) {
       console.log("Page Up");
       this.NextPage();
+      changed = true;
     }
 
-    while (page < this.MyPage) {
+    if (page < this.MyPage) {
       console.log("Page Down");
       this.PrevPage();
+      changed = true;
+    }
+
+    if (changed) {
+      setTimeout(function () {
+        return _this.GoToPage(page);
+      }, 10);
     }
   }
 };
