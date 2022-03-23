@@ -13,10 +13,16 @@ function newGuid() {
     );
 }
 export class Session {
-    Key
-    Users
+    Key;
+    Users;
+    LHref;
+    LPath;
+    Page;
     constructor() {
         this.Key = newGuid();
         this.Users = {}
+        this.LHref = null;
+        this.LPath = null;
+        this.Page = null;
     }
 }

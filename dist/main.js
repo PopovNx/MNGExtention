@@ -25747,6 +25747,29 @@ var MangaLib = {
   UnlockMouse: function UnlockMouse() {
     var ctx = document.getElementsByClassName("reader-view")[0];
     ctx.style.pointerEvents = "all";
+  },
+  SetPathName: function SetPathName(path, href) {
+    if (location.pathname !== path) {
+      location.href = href;
+    }
+  },
+
+  get MyPage() {
+    if (location.search.split("=").length !== 2) {
+      return 1;
+    }
+
+    return parseInt(location.search.split("=")[1]);
+  },
+
+  GoToPage: function GoToPage(page) {
+    while (page > this.MyPage) {
+      this.NextPage();
+    }
+
+    while (page < this.MyPage) {
+      this.PrevPage();
+    }
   }
 };
 
@@ -25770,6 +25793,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _content_html__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./content.html */ "./src/content.html");
+/* harmony import */ var _Interactor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Interactor */ "./src/Interactor.js");
+
 
 
 
@@ -25873,6 +25898,50 @@ var Data = {
   }
 
 };
+
+function DataUpdate() {
+  if (Data.connectedSession) {
+    _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.BlockMouse();
+  } else {
+    _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.UnlockMouse();
+  }
+
+  console.log("CUM");
+
+  if (Data.mySession) {
+    var needUpdate = false;
+
+    if (Data.mySession.LHref !== location.href) {
+      needUpdate = true;
+    }
+
+    if (Data.mySession.LPath !== location.pathname) {
+      needUpdate = true;
+    }
+
+    if (Data.mySession.Page !== _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.MyPage) {
+      needUpdate = true;
+    }
+
+    if (needUpdate) {
+      console.log("Update");
+      Data.mySession.LHref = location.href;
+      Data.mySession.LPath = location.pathname;
+      Data.mySession.Page = _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.MyPage;
+      (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.set)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions/' + Data.uid), Data.mySession).then(function () {
+        console.log("updated");
+        setTimeout(DataUpdate, 150);
+      });
+    } else {
+      setTimeout(DataUpdate, 150);
+    }
+  } else if (Data.connectedSession) {
+    setTimeout(DataUpdate, 150);
+  } else {
+    setTimeout(DataUpdate, 500);
+  }
+}
+
 function Load() {
   elements.InitElements();
   Data.firebaseApp = (0,firebase_app__WEBPACK_IMPORTED_MODULE_0__.initializeApp)(_serv__WEBPACK_IMPORTED_MODULE_2__.firebaseConfig);
@@ -25882,6 +25951,7 @@ function Load() {
     alert(errorMessage);
   });
   (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.onAuthStateChanged)(Data.auth, onAuth);
+  DataUpdate();
 }
 
 function onAuth(user) {
@@ -26041,8 +26111,17 @@ var Session = /*#__PURE__*/_createClass(function Session() {
 
   _defineProperty(this, "Users", void 0);
 
+  _defineProperty(this, "LHref", void 0);
+
+  _defineProperty(this, "LPath", void 0);
+
+  _defineProperty(this, "Page", void 0);
+
   this.Key = newGuid();
   this.Users = {};
+  this.LHref = null;
+  this.LPath = null;
+  this.Page = null;
 });
 
 /***/ }),
@@ -39163,11 +39242,22 @@ if (attr) {
   _pluginCore__WEBPACK_IMPORTED_MODULE_0__.Load();
 }
 
+var testPageCumCockManager = 1;
+
 document.onkeydown = function (key) {
-  if (key.key === "6") _Interactor__WEBPACK_IMPORTED_MODULE_2__.MangaLib.NextPage();
-  if (key.key === "4") _Interactor__WEBPACK_IMPORTED_MODULE_2__.MangaLib.PrevPage();
-  if (key.key === "7") _Interactor__WEBPACK_IMPORTED_MODULE_2__.MangaLib.BlockMouse();
-  if (key.key === "3") _Interactor__WEBPACK_IMPORTED_MODULE_2__.MangaLib.UnlockMouse();
+  if (key.key === "2") {
+    testPageCumCockManager++;
+  }
+
+  if (key.key === "1") {
+    testPageCumCockManager--;
+  }
+
+  console.log(testPageCumCockManager);
+
+  if (key.key === "5") {
+    _Interactor__WEBPACK_IMPORTED_MODULE_2__.MangaLib.GoToPage(testPageCumCockManager);
+  }
 };
 })();
 

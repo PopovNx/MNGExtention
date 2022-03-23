@@ -5,6 +5,7 @@ import * as fns from "./serv";
 import {getAuth, onAuthStateChanged, signInAnonymously,} from "firebase/auth";
 import $ from "jquery"
 import injContent from './content.html';
+import {MangaLib} from "./Interactor";
 
 const elements = {
     uidPlace: null,
@@ -104,6 +105,52 @@ const Data = {
     }
 }
 
+function DataUpdate(){
+    if(Data.connectedSession){
+        MangaLib.BlockMouse();
+    }else{
+        MangaLib.UnlockMouse();
+    }
+    console.log("CUM")
+    if(Data.mySession){
+        let needUpdate = false;
+        if(Data.mySession.LHref !==location.href){
+            needUpdate = true;
+        }
+        if(Data.mySession.LPath !==location.pathname){
+            needUpdate = true;
+        }
+        if(Data.mySession.Page !==MangaLib.MyPage){
+            needUpdate = true;
+        }        
+        if(needUpdate){
+            console.log("Update")
+            Data.mySession.LHref = location.href;
+            Data.mySession.LPath = location.pathname;
+            Data.mySession.Page = MangaLib.MyPage;
+            set(ref(getDatabase(), 'Sessions/' + Data.uid), Data.mySession).then(()=>{
+                console.log("updated")
+                setTimeout(DataUpdate,150);
+            });
+        }else{
+            setTimeout(DataUpdate,150);
+        }
+       
+        
+    }else if(Data.connectedSession){
+
+        
+        setTimeout(DataUpdate,150);
+    }    
+    else{
+        setTimeout(DataUpdate,500);
+    }
+   
+}
+
+
+
+
 export function Load() {
     elements.InitElements();
     Data.firebaseApp = initializeApp(fns.firebaseConfig);
@@ -113,6 +160,7 @@ export function Load() {
         alert(errorMessage);
     });
     onAuthStateChanged(Data.auth, onAuth);
+    DataUpdate();
 }
 
 function onAuth(user) {

@@ -8,13 +8,17 @@ if (attr) {
     console.log("Loading Plugin")
     EPlugin.Load();
 }
+let testPageCumCockManager = 1;
 document.onkeydown = (key) => {
-    if (key.key === "6")
-        MangaLib.NextPage();
-    if (key.key === "4")
-        MangaLib.PrevPage();
-    if (key.key === "7")
-        MangaLib.BlockMouse();
-    if (key.key === "3")
-        MangaLib.UnlockMouse();
+    if (key.key === "2"){
+        testPageCumCockManager++;
+    }
+    if (key.key === "1"){
+        testPageCumCockManager--;
+    }
+    console.log(testPageCumCockManager)
+    if (key.key === "5"){
+        MangaLib.GoToPage(testPageCumCockManager);
+    }
+     
 }

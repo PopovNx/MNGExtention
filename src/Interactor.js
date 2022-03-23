@@ -33,4 +33,21 @@
         const ctx=   document.getElementsByClassName("reader-view")[0];
         ctx.style.pointerEvents = "all";
     },
+    SetPathName(path,href){
+        if(location.pathname!==path){
+            location.href = href;
+        }
+    },
+    get MyPage(){
+        if(location.search.split("=").length!==2){
+            return 1;
+        }        
+        return parseInt(location.search.split("=")[1]);
+    },
+    GoToPage(page){
+       while (page>this.MyPage)
+           this.NextPage();
+        while (page<this.MyPage)
+            this.PrevPage();
+    }
 }
