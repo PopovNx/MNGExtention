@@ -25721,6 +25721,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var firebase_database__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! firebase/database */ "./node_modules/firebase/database/dist/index.esm.js");
 /* harmony import */ var _serv__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./serv */ "./src/serv.js");
 /* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! firebase/auth */ "./node_modules/firebase/auth/dist/index.esm.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _content_html__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./content.html */ "./src/content.html");
+
+
 
 
 
@@ -25728,41 +25733,31 @@ __webpack_require__.r(__webpack_exports__);
 var elements = {
   uidPlace: null,
   createBtn: null,
-  sesKey: null,
+  mySessionKey: null,
   connectBtn: null,
   connectInput: null,
-  update: function update() {
-    return;
+  mySessionUsers: null,
+  InitElements: function InitElements() {
+    var _this = this;
 
-    if (uid) {
-      console.log(uid);
-      console.log(this.uidPlace);
-      this.uidPlace.innerText = uid.slice(0, 8);
-    }
+    jquery__WEBPACK_IMPORTED_MODULE_4___default()(".reader-header-actions_right").prepend(jquery__WEBPACK_IMPORTED_MODULE_4___default()(_content_html__WEBPACK_IMPORTED_MODULE_5__["default"]));
+    this.uidPlace = jquery__WEBPACK_IMPORTED_MODULE_4___default()("#fp_uid")[0];
+    this.createBtn = jquery__WEBPACK_IMPORTED_MODULE_4___default()("#fp_create_btn")[0];
+    this.mySessionKey = jquery__WEBPACK_IMPORTED_MODULE_4___default()("#fp_session_id")[0];
+    this.connectInput = jquery__WEBPACK_IMPORTED_MODULE_4___default()("#fp_connect_id")[0];
+    this.mySessionUsers = jquery__WEBPACK_IMPORTED_MODULE_4___default()("#fp_my_session_users")[0];
+    this.connectBtn = jquery__WEBPACK_IMPORTED_MODULE_4___default()("#fp_connect_btn")[0];
 
-    if (mySession) {
-      this.sesKey.innerText = mySession.Key;
-      this.createBtn.innerText = "Удалить пати";
-      this.sesKey.style.display = "flex";
-      this.connectBtn.style.display = "none";
-    } else {
-      this.sesKey.innerText = "";
-      this.createBtn.innerText = "Создать пати";
-      this.sesKey.style.display = "none";
-      this.connectBtn.style.display = "flex";
-    }
+    this.createBtn.onclick = function () {
+      if (Data.mySession) removeSession();else createSession();
+    };
 
-    connectKeyValue = elements.connectInput.value;
+    this.connectBtn.onclick = function () {
+      var cKey = jquery__WEBPACK_IMPORTED_MODULE_4___default()(_this.connectInput).val();
+      if (Data.connectedSession) disconnect();else connect(cKey);
+    };
 
-    if (connectKey) {
-      elements.connectInput.disabled = true;
-      elements.createBtn.style.display = "none";
-      elements.connectBtn.innerText = "Отключиться";
-    } else {
-      elements.connectInput.disabled = false;
-      elements.connectBtn.innerText = "Подключиться";
-      elements.createBtn.style.display = "flex";
-    }
+    jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.uidPlace).css("display", "none");
   }
 };
 var Data = {
@@ -25772,18 +25767,68 @@ var Data = {
   set mySession(e) {
     console.log("New session value:", e);
     this._mySession = e;
+
+    if (e) {
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.createBtn).text("Remove group");
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.mySessionKey).text(e.Key);
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.mySessionKey).css("display", "flex");
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.connectBtn).css("display", "none");
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.connectInput).css("display", "none");
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.mySessionUsers).css("display", "flex");
+    } else {
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.createBtn).text("Create group");
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.mySessionKey).css("display", "none");
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.connectBtn).css("display", "flex");
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.connectInput).css("display", "flex");
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.mySessionUsers).css("display", "none");
+    }
   },
 
   get mySession() {
     return this._mySession;
   },
 
-  uid: null,
-  connectKey: null,
-  connectKeyValue: null
+  get uid() {
+    return this._uid;
+  },
+
+  set uid(e) {
+    this._uid = e;
+    jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.uidPlace).text(e.slice(0, 5));
+  },
+
+  get connectedSession() {
+    return this._connectedSession;
+  },
+
+  set connectedSession(e) {
+    console.log("Connected to:", e);
+    this._connectedSession = e;
+
+    if (e) {
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.connectBtn).text("Disconnect");
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.connectInput).prop('disabled', true);
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.connectInput).val(e);
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.createBtn).css("display", "none");
+    } else {
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.connectBtn).text("Connect");
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.connectInput).prop('disabled', false);
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.createBtn).css("display", "flex");
+    }
+  },
+
+  get mySessionUsers() {
+    return this._mySessionUsers;
+  },
+
+  set mySessionUsers(e) {
+    jquery__WEBPACK_IMPORTED_MODULE_4___default()(elements.mySessionUsers).text(e);
+    this._mySessionUsers = e;
+  }
+
 };
 function Load() {
-  //ElementGeneration();
+  elements.InitElements();
   Data.firebaseApp = (0,firebase_app__WEBPACK_IMPORTED_MODULE_0__.initializeApp)(_serv__WEBPACK_IMPORTED_MODULE_2__.firebaseConfig);
   Data.auth = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.getAuth)();
   (0,firebase_auth__WEBPACK_IMPORTED_MODULE_3__.signInAnonymously)(Data.auth)["catch"](function (error) {
@@ -25797,73 +25842,100 @@ function onAuth(user) {
   if (user && user.uid) {
     Data.uid = user.uid;
     (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.onValue)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions/' + Data.uid), function (data) {
-      return Data.mySession = data.val();
+      var dt = data.val();
+      Data.mySession = data.val();
+      var count = 0;
+
+      if (dt && dt.Users) {
+        for (var dtKey in dt.Users) {
+          count++;
+        }
+      }
+
+      Data.mySessionUsers = "".concat(count);
+    });
+    (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.onValue)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions'), function (data) {
+      var dt = data.val();
+      var mdf = false;
+
+      for (var dataKey in dt) {
+        var val = dt[dataKey];
+
+        if (val.Users) {
+          if (val.Users[Data.uid]) {
+            Data.connectedSession = val["Key"];
+            mdf = true;
+          }
+        }
+      }
+
+      if (!mdf) {
+        Data.connectedSession = null;
+      }
     });
   } else {
     console.log("No User");
   }
+}
+
+function connect(key) {
+  console.log("connecting to:", key);
+  (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.get)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions')).then(function (data) {
+    var sessions = data.val();
+    var sessionKey = null;
+
+    for (var fdKey in sessions) {
+      if (sessions[fdKey].Key === key) sessionKey = fdKey;
+    }
+
+    if (!sessionKey) {
+      return;
+    }
+
+    var sessionUsersRef = (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions/' + sessionKey + "/Users/" + Data.uid);
+    (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.set)(sessionUsersRef, {
+      state: "online"
+    }).then();
+  });
+}
+
+function disconnect() {
+  (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.get)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions')).then(function (data) {
+    var sessions = data.val();
+    var sessionKey = null;
+
+    for (var fdKey in sessions) {
+      if (sessions[fdKey].Key === Data.connectedSession) sessionKey = fdKey;
+    }
+
+    console.log(sessionKey);
+    if (!sessionKey) return;
+    var sessionUsersRef = (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions/' + sessionKey + "/Users/" + Data.uid);
+    (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.remove)(sessionUsersRef).then();
+  });
+}
+
+function createSession() {
+  (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.get)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions/' + Data.uid)).then(function (data) {
+    if (!data.val()) {
+      (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.set)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions/' + Data.uid), new _serv__WEBPACK_IMPORTED_MODULE_2__.Session()).then();
+    }
+  });
+}
+
+function removeSession() {
+  (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.remove)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions/' + Data.uid)).then();
 }
 /*
 
 
 
 
-function createSession() {
-    get(ref(getDatabase(), 'Sessions/' + uid)).then((data) => {
-        if (!data.val()) {
-            set(ref(getDatabase(), 'Sessions/' + uid), new fns.Session()).then();
-        }
-    });
-}
-
-function connect() {
-    get(ref(getDatabase(), 'Sessions')).then((data) => {
-        const sessions = data.val();
-        let sessionKey = null;
-        for (const fdKey in sessions)
-            if (sessions[fdKey].Key === connectKeyValue)
-                sessionKey = fdKey;
-        if (!sessionKey){
-            connectKeyValue = null;
-            connectKey = null;
-            return;
-        }
-        const sessionUsersRef = ref(getDatabase(), 'Sessions/' + sessionKey + "/Users/" + uid);
-        set(sessionUsersRef, {state: "online"}).then();
-        connectKey = connectKeyValue;
-
-    })
-}
-
-function disconnect() {
-    get(ref(getDatabase(), 'Sessions')).then((data) => {
-        const sessions = data.val();
-        let sessionKey = null;
-        for (const fdKey in sessions)
-            if (sessions[fdKey].Key === connectKey)
-                sessionKey = fdKey;
-        console.log(sessionKey);
-        if (!sessionKey) return;
-        const sessionUsersRef = ref(getDatabase(), 'Sessions/' + sessionKey + "/Users/" + uid);
-        remove(sessionUsersRef).then();
-        connectKey = null;
-       
-    })
-}
-
-function removeSession() {
-    remove(ref(getDatabase(), 'Sessions/' + uid)).then();
-}
 
 
-function createBtnClicked(){
-    if(mySession==null){
-        createSession();
-    }else{
-        removeSession();
-    }
-   
-}
+
+
+
 
 function connectBtnClicked() {
     if(connectKey){
@@ -25874,54 +25946,6 @@ function connectBtnClicked() {
     
 }
 
-function ElementGeneration() {
-    const dta = document.querySelector(".reader-header-actions_right");
-    function REc() {
-        const dtx = document.createElement("div");
-        dtx.classList.add("reader-header-action_icon");
-        dtx.classList.add("reader-header-action");
-        return dtx;
-    }
-    {
-        const dtx = REc();
-        elements.uidPlace = dtx;
-        console.log(elements.uidPlace)
-        dta.insertBefore(dtx, dta.childNodes[0]);
-    }
-    {
-        const dtx = REc();
-        elements.createBtn = dtx;
-        dtx.style.userSelect="none";
-        dtx.onclick=createBtnClicked;
-        dta.insertBefore(dtx, dta.childNodes[0]);
-    }
-    {
-        const dtx = REc();
-        elements.connectBtn = dtx;
-        dtx.style.userSelect="none";
-        dtx.onclick=connectBtnClicked;
-        dtx.innerText="Присоединиться";
-        dta.insertBefore(dtx, dta.childNodes[0]);
-    }
-    {
-        const dtx = REc();
-        elements.sesKey = dtx;
-        dtx.style.userSelect="all";
-        dta.insertBefore(dtx, dta.childNodes[0]);
-    }
-    {
-        const dtx = document.createElement("input");
-        dtx.classList.add("reader-header-action_icon");
-        dtx.classList.add("reader-header-action");
-        dtx.style.border="0";
-        dtx.style.outline="0";
-        dtx.style.textAlign="center";
-        elements.connectInput = dtx;
-        dta.insertBefore(dtx, dta.childNodes[0]);
-    }
-    setInterval(elements.update, 80);
-
-}
 
 
 */
@@ -37089,6 +37113,21 @@ return jQuery;
 
 /***/ }),
 
+/***/ "./src/content.html":
+/*!**************************!*\
+  !*** ./src/content.html ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_my_session_users\" style=\"user-select: all\">\r\n\r\n</div>\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_session_id\" style=\"user-select: all; font-size: 12px\">\r\n    \r\n</div>\r\n<input aria-label=\"Connect GUID\" class=\"reader-header-action_icon reader-header-action\" id=\"fp_connect_id\" style=\"height: 70%; border:none; text-align: center\"/>\r\n\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_connect_btn\" style=\"user-select: none\">\r\n\r\n</div>\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_create_btn\" style=\"user-select: none\">\r\n\r\n</div>\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_uid\" style=\"user-select: all\">\r\n\r\n</div>\r\n");
+
+/***/ }),
+
 /***/ "./node_modules/tslib/tslib.es6.js":
 /*!*****************************************!*\
   !*** ./node_modules/tslib/tslib.es6.js ***!
@@ -39001,6 +39040,18 @@ function setUserLogHandler(logCallback, options) {
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -39051,11 +39102,13 @@ var __webpack_exports__ = {};
   \*********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pluginCore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pluginCore */ "./src/pluginCore.js");
-/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_1__);
 
 
 
-var attr = $("html").attr("data-reader");
+
+var attr = jquery__WEBPACK_IMPORTED_MODULE_1___default()("html").attr("data-reader");
 
 if (attr) {
   console.log("Loading Plugin");

@@ -11,10 +11,10 @@ module.exports = {
         clean: true,
     },
     plugins: [
-        new ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery'
-        }),
+        //  new ProvidePlugin({
+      //      $: 'jquery',
+      //      jQuery: 'jquery'
+      //  }),
         new WebpackExtensionManifestPlugin({
             config: {
                 base: 'src/manifest.json',
@@ -48,7 +48,11 @@ module.exports = {
                     'css-loader',
                     'less-loader'
                 ]
-            }
+            },
+            {
+                test: /\.html$/i,
+                use: 'raw-loader',
+            },
         ]
     }
 };
