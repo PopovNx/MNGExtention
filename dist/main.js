@@ -25706,6 +25706,52 @@ async function deleteDB(dbName) {
 
 /***/ }),
 
+/***/ "./src/Interactor.js":
+/*!***************************!*\
+  !*** ./src/Interactor.js ***!
+  \***************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "MangaLib": () => (/* binding */ MangaLib)
+/* harmony export */ });
+var MangaLib = {
+  NextPage: function NextPage() {
+    var ctx = document.getElementsByClassName("reader-view__wrap")[0].children[0];
+    var event = new MouseEvent('click', {
+      'view': window,
+      'bubbles': true,
+      'cancelable': true,
+      'clientX': 700,
+      'clientY': 200
+    });
+    ctx.dispatchEvent(event);
+  },
+  PrevPage: function PrevPage() {
+    var ctx = document.getElementsByClassName("reader-view__wrap")[0].children[0];
+    var event = new MouseEvent('click', {
+      'view': window,
+      'bubbles': true,
+      'cancelable': true,
+      'clientX': 0,
+      'clientY': 200
+    });
+    ctx.dispatchEvent(event);
+  },
+  BlockMouse: function BlockMouse() {
+    var ctx = document.getElementsByClassName("reader-view")[0];
+    ctx.style.pointerEvents = "none";
+  },
+  UnlockMouse: function UnlockMouse() {
+    var ctx = document.getElementsByClassName("reader-view")[0];
+    ctx.style.pointerEvents = "all";
+  }
+};
+
+/***/ }),
+
 /***/ "./src/pluginCore.js":
 /*!***************************!*\
   !*** ./src/pluginCore.js ***!
@@ -39104,6 +39150,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pluginCore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pluginCore */ "./src/pluginCore.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Interactor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Interactor */ "./src/Interactor.js");
+
 
 
 
@@ -39114,6 +39162,13 @@ if (attr) {
   console.log("Loading Plugin");
   _pluginCore__WEBPACK_IMPORTED_MODULE_0__.Load();
 }
+
+document.onkeydown = function (key) {
+  if (key.key === "6") _Interactor__WEBPACK_IMPORTED_MODULE_2__.MangaLib.NextPage();
+  if (key.key === "4") _Interactor__WEBPACK_IMPORTED_MODULE_2__.MangaLib.PrevPage();
+  if (key.key === "7") _Interactor__WEBPACK_IMPORTED_MODULE_2__.MangaLib.BlockMouse();
+  if (key.key === "3") _Interactor__WEBPACK_IMPORTED_MODULE_2__.MangaLib.UnlockMouse();
+};
 })();
 
 /******/ })()
