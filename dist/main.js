@@ -25906,7 +25906,7 @@ function DataUpdate() {
     _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.UnlockMouse();
   }
 
-  console.log("CUM");
+  console.log(Data.connectedSession);
 
   if (Data.mySession) {
     var needUpdate = false;
@@ -37249,7 +37249,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_my_session_users\" style=\"user-select: all\">\r\n\r\n</div>\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_session_id\" style=\"user-select: all; font-size: 12px\">\r\n    \r\n</div>\r\n<input aria-label=\"Connect GUID\" class=\"reader-header-action_icon reader-header-action\" id=\"fp_connect_id\" style=\"height: 70%; border:none; text-align: center\"/>\r\n\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_connect_btn\" style=\"user-select: none\">\r\n\r\n</div>\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_create_btn\" style=\"user-select: none\">\r\n\r\n</div>\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_uid\" style=\"user-select: all\">\r\n\r\n</div>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_my_session_users\">\r\n\r\n</div>\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_session_id\" style=\"font-size: 12px\">\r\n    \r\n</div>\r\n<input aria-label=\"Connect GUID\" class=\"reader-header-action_icon reader-header-action\" id=\"fp_connect_id\" style=\"height: 70%; border:none; text-align: center\"/>\r\n\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_connect_btn\" style=\"user-select: none\">\r\n\r\n</div>\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_create_btn\" style=\"user-select: none\">\r\n\r\n</div>\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_uid\" style=\"user-select: all\">\r\n\r\n</div>\r\n");
 
 /***/ }),
 

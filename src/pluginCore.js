@@ -111,7 +111,7 @@ function DataUpdate(){
     }else{
         MangaLib.UnlockMouse();
     }
-    console.log("CUM")
+    console.log(Data.connectedSession)
     if(Data.mySession){
         let needUpdate = false;
         if(Data.mySession.LHref !==location.href){
