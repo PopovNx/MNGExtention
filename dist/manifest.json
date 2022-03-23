@@ -10,7 +10,8 @@
   ],
   "host_permissions": [
     "*://*.firebaseio.com/*",
-    "*://mangalib.me/*"
+    "*://mangalib.me/*",
+    "*://hentailib.me/*"
   ],
   "content_security_policy": {
     "script-src": "'self' 'unsafe-eval' https://cdn.firebase.com https://*.firebaseio.com https://*.firebaseio-demo.com",
@@ -19,7 +20,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://mangalib.me/*"
+        "https://mangalib.me/*",
+        "https://hentailib.me/*"
       ],
       "js": [
         "main.js"
