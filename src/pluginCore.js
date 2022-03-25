@@ -15,7 +15,7 @@ const elements = {
     connectInput: null,
     mySessionUsers: null,
     InitElements() {
-        $(".reader-header-actions_right").prepend($(injContent));
+        $(document.body).prepend($(injContent));
         this.uidPlace = $("#fp_uid")[0];
         this.createBtn = $("#fp_create_btn")[0];
         this.mySessionKey = $("#fp_session_id")[0];
@@ -82,7 +82,6 @@ const Data = {
         return this._connectedSession;
     },
     set connectedSession(e) {
-        console.log("Connected to:", e);
         this._connectedSession = e;
         if (e) {
             $(elements.connectBtn).text("Disconnect");
@@ -177,7 +176,6 @@ function onAuth(user) {
                         Data.connectedSession = val["Key"];
                         mdf = true;
                         if (MangaLib.SetPathName(val.LPath, val.LHref)) {
-                            console.log("setPage",val)
                             MangaLib.PageNow = val.Page;
                         }
 
@@ -195,7 +193,6 @@ function onAuth(user) {
 }
 
 function connect(key) {
-    console.log("connecting to:", key)
     get(ref(getDatabase(), 'Sessions')).then((data) => {
         const sessions = data.val();
         let sessionKey = null;

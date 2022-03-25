@@ -25718,6 +25718,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "MangaLib": () => (/* binding */ MangaLib)
 /* harmony export */ });
 var MangaLib = {
+  PageNow: 1,
   NextPage: function NextPage() {
     var ctx = document.getElementsByClassName("reader-view__wrap")[0].children[0];
     var event = new MouseEvent('click', {
@@ -25764,30 +25765,9 @@ var MangaLib = {
     return parseInt(paramValue);
   },
 
-  set PageNow(e) {
-    console.log("page now", e);
-    this._pageNow = e;
-  },
-
-  get PageNow() {
-    return this._pageNow;
-  },
-
   MoveToPage: function MoveToPage() {
-    this.GoToPage(this.PageNow);
-  },
-  GoToPage: function GoToPage(page) {
-    console.log(page);
-
-    if (page > this.MyPage) {
-      console.log("Page Up");
-      this.NextPage();
-    }
-
-    if (page < this.MyPage) {
-      console.log("Page Down");
-      this.PrevPage();
-    }
+    if (this.PageNow > this.MyPage) this.NextPage();
+    if (this.PageNow < this.MyPage) this.PrevPage();
   }
 };
 
@@ -25829,7 +25809,7 @@ var elements = {
   InitElements: function InitElements() {
     var _this = this;
 
-    jquery__WEBPACK_IMPORTED_MODULE_4___default()(".reader-header-actions_right").prepend(jquery__WEBPACK_IMPORTED_MODULE_4___default()(_content_html__WEBPACK_IMPORTED_MODULE_5__["default"]));
+    jquery__WEBPACK_IMPORTED_MODULE_4___default()(document.body).prepend(jquery__WEBPACK_IMPORTED_MODULE_4___default()(_content_html__WEBPACK_IMPORTED_MODULE_5__["default"]));
     this.uidPlace = jquery__WEBPACK_IMPORTED_MODULE_4___default()("#fp_uid")[0];
     this.createBtn = jquery__WEBPACK_IMPORTED_MODULE_4___default()("#fp_create_btn")[0];
     this.mySessionKey = jquery__WEBPACK_IMPORTED_MODULE_4___default()("#fp_session_id")[0];
@@ -25890,7 +25870,6 @@ var Data = {
   },
 
   set connectedSession(e) {
-    console.log("Connected to:", e);
     this._connectedSession = e;
 
     if (e) {
@@ -25995,7 +25974,6 @@ function onAuth(user) {
             mdf = true;
 
             if (_Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.SetPathName(val.LPath, val.LHref)) {
-              console.log("setPage", val);
               _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.PageNow = val.Page;
             }
           }
@@ -26012,7 +25990,6 @@ function onAuth(user) {
 }
 
 function connect(key) {
-  console.log("connecting to:", key);
   (0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.get)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.ref)((0,firebase_database__WEBPACK_IMPORTED_MODULE_1__.getDatabase)(), 'Sessions')).then(function (data) {
     var sessions = data.val();
     var sessionKey = null;
@@ -26115,9 +26092,7 @@ var firebaseConfig = {
 };
 
 function newGuid() {
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, function (c) {
-    return (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16);
-  });
+  return Math.random().toString(16).slice(2);
 }
 
 var Session = /*#__PURE__*/_createClass(function Session() {
@@ -37265,7 +37240,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_my_session_users\">\r\n\r\n</div>\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_session_id\" style=\"font-size: 12px\">\r\n    \r\n</div>\r\n<input aria-label=\"Connect GUID\" class=\"reader-header-action_icon reader-header-action\" id=\"fp_connect_id\" style=\"height: 70%; border:none; text-align: center\"/>\r\n\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_connect_btn\" style=\"user-select: none\">\r\n\r\n</div>\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_create_btn\" style=\"user-select: none\">\r\n\r\n</div>\r\n<div class=\"reader-header-action_icon reader-header-action\" id=\"fp_uid\" style=\"user-select: all\">\r\n\r\n</div>\r\n");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("<style>\r\n    #fp_pl_overlay {\r\n        position: fixed;\r\n        display: flex;\r\n        background-color: rgba(0, 0, 0, 0.5);\r\n        z-index: 999999999999;\r\n        cursor: pointer;\r\n        right: 0;\r\n        bottom: 0;\r\n        border-radius: 10px;\r\n        opacity: 20%;\r\n        transition: opacity .3s;\r\n    }\r\n\r\n    #fp_pl_overlay:hover {\r\n        opacity: 100%;\r\n    }\r\n\r\n    #fp_pl_overlay_config {\r\n        display: flex;\r\n        margin: 12px;\r\n    }\r\n\r\n    .fp_pl_overlay_config_element {\r\n        margin: 3px;\r\n        padding: 2px;\r\n        border: 2px dashed rgba(227, 238, 255, 0.34);\r\n        border-radius: 5px;\r\n    }\r\n    .fp_pl_overlay_config_element:hover {\r\n        border-style: solid;\r\n    }\r\n\r\n    #fp_my_session_users:before {\r\n        content: \"Users: \";\r\n    }\r\n\r\n    #fp_session_id:before {\r\n        content: \"Id: \";\r\n    }\r\n\r\n    #fp_connect_id {\r\n        text-align: center;\r\n        border: 0;\r\n        outline: 0;\r\n    }\r\n    \r\n</style>\r\n<div id=\"fp_pl_overlay\">\r\n\r\n    <div id=\"fp_pl_overlay_config\">\r\n        <div class=\"fp_pl_overlay_config_element\" id=\"fp_my_session_users\"></div>\r\n        <div class=\"fp_pl_overlay_config_element\" id=\"fp_session_id\"></div>\r\n        <input class=\"fp_pl_overlay_config_element\" aria-label=\"Connect GUID\" placeholder=\"a0a0a0a0a0a0a\"\r\n               id=\"fp_connect_id\"/>\r\n        <div class=\"fp_pl_overlay_config_element\" id=\"fp_connect_btn\"\r\n             style=\"user-select: none\"></div>\r\n        <div class=\"fp_pl_overlay_config_element\" id=\"fp_create_btn\"\r\n             style=\"user-select: none\"></div>\r\n        <div class=\"fp_pl_overlay_config_element\" id=\"fp_uid\" style=\"user-select: all\"></div>\r\n    </div>\r\n</div>\r\n\r\n");
 
 /***/ }),
 

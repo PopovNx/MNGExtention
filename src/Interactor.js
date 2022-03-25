@@ -1,4 +1,5 @@
 ﻿export const MangaLib = {
+    PageNow:1,
     NextPage() {
         const ctx = document
             .getElementsByClassName("reader-view__wrap")[0]
@@ -46,25 +47,10 @@
         const paramValue = url.searchParams.get("page")||1;
         return parseInt(paramValue);
     },
-    set PageNow(e) {
-        console.log("page now",e)
-        this._pageNow = e;
-    },
-    get PageNow() {
-        return this._pageNow;
-    },
     MoveToPage() {
-        this.GoToPage(this.PageNow);
-    },
-    GoToPage(page) {
-        console.log(page)
-        if (page > this.MyPage) {
-            console.log("Page Up");
+        if (this.PageNow > this.MyPage)
             this.NextPage();
-        }
-        if (page < this.MyPage) {
-            console.log("Page Down");
+        if (this.PageNow < this.MyPage)
             this.PrevPage();
-        }
-    }
+    },
 }

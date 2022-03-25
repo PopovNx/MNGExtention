@@ -1,17 +1,63 @@
-﻿<div class="reader-header-action_icon reader-header-action" id="fp_my_session_users">
+﻿<style>
+    #fp_pl_overlay {
+        position: fixed;
+        display: flex;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999999999999;
+        cursor: pointer;
+        right: 0;
+        bottom: 0;
+        border-radius: 10px;
+        opacity: 20%;
+        transition: opacity .3s;
+    }
 
-</div>
-<div class="reader-header-action_icon reader-header-action" id="fp_session_id" style="font-size: 12px">
+    #fp_pl_overlay:hover {
+        opacity: 100%;
+    }
+
+    #fp_pl_overlay_config {
+        display: flex;
+        margin: 12px;
+    }
+
+    .fp_pl_overlay_config_element {
+        margin: 3px;
+        padding: 2px;
+        border: 2px dashed rgba(227, 238, 255, 0.34);
+        border-radius: 5px;
+    }
+    .fp_pl_overlay_config_element:hover {
+        border-style: solid;
+    }
+
+    #fp_my_session_users:before {
+        content: "Users: ";
+    }
+
+    #fp_session_id:before {
+        content: "Id: ";
+    }
+
+    #fp_connect_id {
+        text-align: center;
+        border: 0;
+        outline: 0;
+    }
     
-</div>
-<input aria-label="Connect GUID" class="reader-header-action_icon reader-header-action" id="fp_connect_id" style="height: 70%; border:none; text-align: center"/>
+</style>
+<div id="fp_pl_overlay">
 
-<div class="reader-header-action_icon reader-header-action" id="fp_connect_btn" style="user-select: none">
-
+    <div id="fp_pl_overlay_config">
+        <div class="fp_pl_overlay_config_element" id="fp_my_session_users"></div>
+        <div class="fp_pl_overlay_config_element" id="fp_session_id"></div>
+        <input class="fp_pl_overlay_config_element" aria-label="Connect GUID" placeholder="a0a0a0a0a0a0a"
+               id="fp_connect_id"/>
+        <div class="fp_pl_overlay_config_element" id="fp_connect_btn"
+             style="user-select: none"></div>
+        <div class="fp_pl_overlay_config_element" id="fp_create_btn"
+             style="user-select: none"></div>
+        <div class="fp_pl_overlay_config_element" id="fp_uid" style="user-select: all"></div>
+    </div>
 </div>
-<div class="reader-header-action_icon reader-header-action" id="fp_create_btn" style="user-select: none">
 
-</div>
-<div class="reader-header-action_icon reader-header-action" id="fp_uid" style="user-select: all">
-
-</div>
