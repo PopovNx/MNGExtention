@@ -107,6 +107,7 @@ const Data = {
 function DataUpdate() {
     if (Data.connectedSession) {
         MangaLib.BlockMouse();
+        MangaLib.MoveToPage();
     } else {
         MangaLib.UnlockMouse();
     }
@@ -134,7 +135,7 @@ function DataUpdate() {
 
 
     } else {
-        setTimeout(DataUpdate, 500);
+        setTimeout(DataUpdate, 100);
     }
 
 }
@@ -176,7 +177,8 @@ function onAuth(user) {
                         Data.connectedSession = val["Key"];
                         mdf = true;
                         if (MangaLib.SetPathName(val.LPath, val.LHref)) {
-                            MangaLib.GoToPage(val.Page);
+                            console.log("setPage",val)
+                            MangaLib.PageNow = val.Page;
                         }
 
                     }

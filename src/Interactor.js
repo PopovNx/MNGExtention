@@ -1,5 +1,5 @@
 ﻿export const MangaLib = {
-    NextPage(){
+    NextPage() {
         const ctx = document
             .getElementsByClassName("reader-view__wrap")[0]
             .children[0];
@@ -12,7 +12,7 @@
         });
         ctx.dispatchEvent(event);
     },
-    PrevPage(){
+    PrevPage() {
         const ctx = document
             .getElementsByClassName("reader-view__wrap")[0]
             .children[0];
@@ -25,42 +25,46 @@
         });
         ctx.dispatchEvent(event);
     },
-    BlockMouse(){
-      const ctx=   document.getElementsByClassName("reader-view")[0];
+    BlockMouse() {
+        const ctx = document.getElementsByClassName("reader-view")[0];
         ctx.style.pointerEvents = "none";
     },
-    UnlockMouse(){
-        const ctx=   document.getElementsByClassName("reader-view")[0];
+    UnlockMouse() {
+        const ctx = document.getElementsByClassName("reader-view")[0];
         ctx.style.pointerEvents = "all";
     },
-    SetPathName(path,href){
-        if(location.pathname!==path){
+    SetPathName(path, href) {
+        if (location.pathname !== path) {
             location.href = href;
             console.log("Loading New Src");
             return false;
         }
         return true;
     },
-    get MyPage(){
-        if(location.search.split("=").length!==2){
-            return 1;
-        }        
-        return parseInt(location.search.split("=")[1]);
+    get MyPage() {
+        const url = new URL(location.href);
+        const paramValue = url.searchParams.get("page")||1;
+        return parseInt(paramValue);
     },
-    GoToPage(page){
-        let changed = false;
-       if (page>this.MyPage){
-           console.log("Page Up");
-           this.NextPage();
-           changed = true;
-       }          
-        if(page<this.MyPage){
+    set PageNow(e) {
+        console.log("page now",e)
+        this._pageNow = e;
+    },
+    get PageNow() {
+        return this._pageNow;
+    },
+    MoveToPage() {
+        this.GoToPage(this.PageNow);
+    },
+    GoToPage(page) {
+        console.log(page)
+        if (page > this.MyPage) {
+            console.log("Page Up");
+            this.NextPage();
+        }
+        if (page < this.MyPage) {
             console.log("Page Down");
             this.PrevPage();
-            changed = true;
         }
-          if(changed){
-              setTimeout(()=>this.GoToPage(page), 10);
-          }
     }
 }

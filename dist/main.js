@@ -25759,34 +25759,34 @@ var MangaLib = {
   },
 
   get MyPage() {
-    if (location.search.split("=").length !== 2) {
-      return 1;
-    }
-
-    return parseInt(location.search.split("=")[1]);
+    var url = new URL(location.href);
+    var paramValue = url.searchParams.get("page") || 1;
+    return parseInt(paramValue);
   },
 
-  GoToPage: function GoToPage(page) {
-    var _this = this;
+  set PageNow(e) {
+    console.log("page now", e);
+    this._pageNow = e;
+  },
 
-    var changed = false;
+  get PageNow() {
+    return this._pageNow;
+  },
+
+  MoveToPage: function MoveToPage() {
+    this.GoToPage(this.PageNow);
+  },
+  GoToPage: function GoToPage(page) {
+    console.log(page);
 
     if (page > this.MyPage) {
       console.log("Page Up");
       this.NextPage();
-      changed = true;
     }
 
     if (page < this.MyPage) {
       console.log("Page Down");
       this.PrevPage();
-      changed = true;
-    }
-
-    if (changed) {
-      setTimeout(function () {
-        return _this.GoToPage(page);
-      }, 10);
     }
   }
 };
@@ -25919,6 +25919,7 @@ var Data = {
 function DataUpdate() {
   if (Data.connectedSession) {
     _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.BlockMouse();
+    _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.MoveToPage();
   } else {
     _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.UnlockMouse();
   }
@@ -25949,7 +25950,7 @@ function DataUpdate() {
       setTimeout(DataUpdate, 150);
     }
   } else {
-    setTimeout(DataUpdate, 500);
+    setTimeout(DataUpdate, 100);
   }
 }
 
@@ -25994,7 +25995,8 @@ function onAuth(user) {
             mdf = true;
 
             if (_Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.SetPathName(val.LPath, val.LHref)) {
-              _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.GoToPage(val.Page);
+              console.log("setPage", val);
+              _Interactor__WEBPACK_IMPORTED_MODULE_6__.MangaLib.PageNow = val.Page;
             }
           }
         }
@@ -39255,24 +39257,6 @@ if (attr) {
   console.log("Loading Plugin");
   _pluginCore__WEBPACK_IMPORTED_MODULE_0__.Load();
 }
-
-var testPageCumCockManager = 1;
-
-document.onkeydown = function (key) {
-  if (key.key === "2") {
-    testPageCumCockManager++;
-  }
-
-  if (key.key === "1") {
-    testPageCumCockManager--;
-  }
-
-  console.log(testPageCumCockManager);
-
-  if (key.key === "5") {
-    _Interactor__WEBPACK_IMPORTED_MODULE_2__.MangaLib.GoToPage(testPageCumCockManager);
-  }
-};
 })();
 
 /******/ })()
