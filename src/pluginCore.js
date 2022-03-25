@@ -4,7 +4,7 @@ import {getDatabase, ref, set, onValue, push, onChildAdded, onChildChanged, onCh
 import * as fns from "./serv";
 import {getAuth, onAuthStateChanged, signInAnonymously,} from "firebase/auth";
 import $ from "jquery"
-import injContent from './content.html';
+import injContent from './menu.html';
 import {MangaLib} from "./Interactor";
 
 const elements = {

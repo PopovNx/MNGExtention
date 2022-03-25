@@ -25790,7 +25790,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! firebase/auth */ "./node_modules/firebase/auth/dist/index.esm.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _content_html__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./content.html */ "./src/content.html");
+/* harmony import */ var _menu_html__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./menu.html */ "./src/menu.html");
 /* harmony import */ var _Interactor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Interactor */ "./src/Interactor.js");
 
 
@@ -25809,7 +25809,7 @@ var elements = {
   InitElements: function InitElements() {
     var _this = this;
 
-    jquery__WEBPACK_IMPORTED_MODULE_4___default()(document.body).prepend(jquery__WEBPACK_IMPORTED_MODULE_4___default()(_content_html__WEBPACK_IMPORTED_MODULE_5__["default"]));
+    jquery__WEBPACK_IMPORTED_MODULE_4___default()(document.body).prepend(jquery__WEBPACK_IMPORTED_MODULE_4___default()(_menu_html__WEBPACK_IMPORTED_MODULE_5__["default"]));
     this.uidPlace = jquery__WEBPACK_IMPORTED_MODULE_4___default()("#fp_uid")[0];
     this.createBtn = jquery__WEBPACK_IMPORTED_MODULE_4___default()("#fp_create_btn")[0];
     this.mySessionKey = jquery__WEBPACK_IMPORTED_MODULE_4___default()("#fp_session_id")[0];
@@ -37229,10 +37229,10 @@ return jQuery;
 
 /***/ }),
 
-/***/ "./src/content.html":
-/*!**************************!*\
-  !*** ./src/content.html ***!
-  \**************************/
+/***/ "./src/menu.html":
+/*!***********************!*\
+  !*** ./src/menu.html ***!
+  \***********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
